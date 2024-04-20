@@ -31,7 +31,7 @@ struct WeightedUnionFind {
 	}
 
 	int size(int x) {
-		return -parents[root(i)];
+		return -parents[root(x)];
 	}
 
 private:
