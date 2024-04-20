@@ -14,7 +14,7 @@ struct SegmentTree {
 
 	SegmentTree(vector<T> vec, T ti, function<T(T, T)> op) : ti(ti), op(op) {
 		n = 1;
-		while (n < size) n *= 2;
+		while (n < (int)vec.size()) n *= 2;
 		nodes.resize(n * 2, ti);
 		build(vec);
 	}
