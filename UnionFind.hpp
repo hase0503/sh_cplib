@@ -15,6 +15,10 @@ struct UnionFind {
 		parents[y] = x;
 	}
 
+	bool connected(int x, int y) {
+		return root(x) == root(y);
+	}
+
 	int size(int x) {
 		return -parents[root(x)];
 	}
