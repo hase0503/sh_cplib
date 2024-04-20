@@ -26,7 +26,7 @@ struct WeightedUnionFind {
 		return weight(y) - weight(x);
 	}
 
-	bool connectes(int x, int y) {
+	bool connected(int x, int y) {
 		return root(x) == root(y);
 	}
 
