@@ -3,6 +3,7 @@ struct LazySegmentTree {
 	int n;
 	vector<T> nodes;
 	vector<U> lazy;
+	vector<int> sizes;
 	T ti;
 	U ui;
 	function<T(T, T)> op;
@@ -20,7 +21,10 @@ struct LazySegmentTree {
 		n = 1;
 		while (n < size) n *= 2;
 		nodes.resize(n * 2, ti);
-		lazy.assign(n * 2, ui);
+		lazy.resize(n * 2, ui);
+		sizes.resize(n * 2);
+		for (int i = 0; i < size; ++i) sizes[n + i] = 1;
+		for (int i = n - 1; i > 0; --i) sizes[i] = sizes[i * 2] + sizes[i * 2 + 1];
 	}
 
 	LazySegmentTree(vector<T> vec, T ti, U ui, function<T(T, T)> op, function<T(T, U, int)> mapping, function<U(U, U)> composition)
@@ -67,7 +71,7 @@ struct LazySegmentTree {
 	void apply(int k, U x) {
 		k += n;
 		for (int i = bit_width((unsigned int)n) - 1; i > 0; --i) propagate(k >> i);
-		nodes[k] = op(nodes[k], x);
+		nodes[k] = mapping(nodes[k], x, sizes[k]);
 		for (int i = 1; i < bit_width((unsigned int)n); ++i) update(k >> i);
 	}
 
@@ -78,8 +82,8 @@ struct LazySegmentTree {
 			if (((r >> i) << i) != r) propagate((r - 1) >> i);
 		}
 		for (int l2 = l, r2 = r; l2 < r2; l2 /= 2, r2 /= 2) {
-			if (l2 % 2 == 1) all_apply(l++, x);
-			if (r2 % 2 == 1) all_apply(--r, x);
+			if (l2 % 2 == 1) all_apply(l2++, x);
+			if (r2 % 2 == 1) all_apply(--r2, x);
 		}
 		for (int i = 1; i < bit_width((unsigned int)n); ++i) {
 			if (((l >> i) << i) != l) update(l >> i);
@@ -94,7 +98,7 @@ private:
 	}
 
 	void all_apply(int i, U x) {
-		nodes[i] = mapping(nodes[i], x, 1 << (bit_width((unsigned int)n) - bit_width((unsigned int)(i))));
+		nodes[i] = mapping(nodes[i], x, sizes[i]);
 		if (i < n) lazy[i] = composition(lazy[i], x);
 	}
 
