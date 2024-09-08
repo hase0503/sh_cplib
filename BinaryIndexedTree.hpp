@@ -1,33 +1,38 @@
 template <typename T>
 struct BinaryIndexedTree {
-	int n;
-	vector<T> nodes;
-	function<T(T, T)> op;
-	T ti;
+        using F = function<T(T, T)>;
 
-	BinaryIndexedTree(int n, function<T(T, T)> op, T ti) : n(n), op(op), ti(ti) {
-		nodes.resize(n + 1, ti);
-	}
+        int n;
+        vector<T> nodes;
+        F op;
+        F inv_op;
+        T t_id;
 
-	BinaryIndexedTree(vector<T> vec, function<T(T, T)> op, T ti) : BinaryIndexedTree(vec.size(), op, ti) {
-		for (int i = 0; i < n; ++i) apply(i, vec[i]);
-	}
+        BinaryIndexedTree(int n, F op, F inv_op, T t_id) : n(n), op(op), inv_op(inv_op), t_id(t_id) {
+                nodes.resize(n + 1, t_id);
+        }
 
-	void get(int k) {
-		return prod(k, k + 1);
-	}
+        BinaryIndexedTree(vector<T> vec, F op, F inv_op, T t_id) : BinaryIndexedTree(vec.size(), op, inv_op, t_id) {
+                for (int i = 0; i < n; ++i) {
+                        apply(i, vec[i]);
+                }
+        }
 
-	void apply(int k, T x) {
-		for (++k; k <= n; k += k & -k) nodes[k] = op(nodes[k], x);
-	}
+        void get(int pos) {
+                return prod(pos, pos + 1);
+        }
 
-	T prod(int k) {
-		T ret = ti;
-		for (; k > 0; k -= k & -k) ret = op(ret, nodes[k]);
-		return ret;
-	}
+        void apply(int pos, T x) {
+                for (++pos; pos <= n; pos += pos & -pos) nodes[pos] = op(nodes[pos], x);
+        }
 
-	T prod(int k, int l) {
-		return prod(l) - prod(k);
-	}
+        T prod(int pos) {
+                T ret = t_id;
+                for (; pos > 0; pos -= pos & -pos) ret = op(ret, nodes[pos]);
+                return ret;
+        }
+
+        T prod(int left, int right) {
+                return inv_op(prod(right), prod(left));
+        }
 };
