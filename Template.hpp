@@ -37,6 +37,6 @@ const llong linf = LLONG_MAX / 2ll;
 const int inf = INT_MAX / 2;
 
 int main() {
-        cin.tie(nullptr);
-        ios_base::sync_with_stdio(false);
+	cin.tie(nullptr);
+	ios_base::sync_with_stdio(false);
 }
