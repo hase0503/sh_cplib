@@ -9,8 +9,12 @@ struct UnionFind {
 
 	void merge(int x, int y) {
 		x = root(x), y = root(y);
-		if (x == y) return;
-		if (-parents[x] < -parents[y]) swap(x, y);
+		if (x == y) {
+			return;
+		}
+		if (-parents[x] < -parents[y]) {
+			swap(x, y);
+		}
 		parents[x] += parents[y];
 		parents[y] = x;
 	}
