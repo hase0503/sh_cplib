@@ -12,6 +12,12 @@ struct Cumsum {
 		vct.resize(n + 1, id);
 	}
 
+	Cumsum(vector<T> v, T id, F op, F inv_op): Cumsum(int(v.size()), id, op, inv_op) {
+		for (int i = 0; i < n; ++i) {
+			set(i, v[i]);
+		}
+	}
+
 	void set(int pos, T x) {
 		vct[pos + 1] = x;
 	}
@@ -23,7 +29,7 @@ struct Cumsum {
 	}
 
 	T get(int pos) {
-		return inv_op(vct[pos + 1], vct[pos]);
+		return prod(pos, pos + 1);
 	}
 
 	T prod(int left, int right) {
