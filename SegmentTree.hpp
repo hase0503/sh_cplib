@@ -16,7 +16,7 @@ struct SegmentTree {
 		return ret;
 	}
 
-	SegmentTree(int size, T t_id, F) : t_id(t_id), op(op) {
+	SegmentTree(int size, T t_id, F op) : t_id(t_id), op(op) {
 		n = 1 << bit_width(size);
 		nodes.resize(n * 2, t_id);
 		for (int i = n - 1; i > 0; --i) {
@@ -24,7 +24,7 @@ struct SegmentTree {
 		}
 	}
 
-	SegmentTree(vector<T> vec, T t_id, function<T(T, T)> op) : t_id(t_id), op(op) {
+	SegmentTree(vector<T> vec, T t_id, F op) : t_id(t_id), op(op) {
 		int size = vec.size();
 		n = 1 << bit_width(size);
 		nodes.resize(n * 2, t_id);
